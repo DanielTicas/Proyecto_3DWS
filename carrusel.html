@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido Usuario</title>
+    <link rel="stylesheet" href="carrusel.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="titulo">Bienvenido Usuario</h1>
+
+        <div class="carousel">
+            <button class="prev">&#10094;</button>
+            
+            <div class="carousel-window">
+                <div class="carousel-track">
+                    <div class="card fade"><img src="Smart1.jpg"></div>
+                    <div class="card fade"><img src="Smart4.jpg" alt="Imagen 2"></div>
+                    <div class="card fade"><img src="Smart3.jpg" alt="Imagen 3"></div>
+                    <div class="card fade"><img src="Smart2.jpg" alt="Imagen 4"></div>
+                    <div class="card fade"><img src="Smart5.jpg" alt="Imagen 5"></div>
+                    <div class="card fade"><img src="Smart6.jpg" alt="Imagen 6"></div>
+                </div>
+            </div>
+
+            <button class="next">&#10095;</button>
+        </div>
+    </div>
+
+    <script>
+        const track = document.querySelector(".carousel-track");
+        const cards = Array.from(track.children);
+        const prevButton = document.querySelector(".prev");
+        const nextButton = document.querySelector(".next");
+
+        let index = 0;
+        const cardsPerView = 3;
+        const cardWidth = 340;
+
+        function updateCarousel() {
+            cards.forEach(card => {
+                card.classList.remove("show");
+            });
+            setTimeout(() => {
+                track.style.transform = `translateX(${-index * cardWidth}px)`;
+                cards.slice(index, index + cardsPerView).forEach(card => {
+                    card.classList.add("show");
+                });
+            }, 150);
+        }
+
+        nextButton.addEventListener("click", () => {
+            if (index < cards.length - cardsPerView) {
+                index++;
+            } else {
+                index = 0;
+            }
+            updateCarousel();
+        });
+
+        prevButton.addEventListener("click", () => {
+            if (index > 0) {
+                index--;
+            } else {
+                index = cards.length - cardsPerView;
+            }
+            updateCarousel();
+        });
+
+        updateCarousel();
+    </script>
+
+</body>
+</html>

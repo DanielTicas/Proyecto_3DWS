@@ -1,0 +1,116 @@
+/* Efecto de aparición suave con desplazamiento */
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.titulo {
+    font-family: 'Poppins', sans-serif; /* Fuente elegante */
+    font-size: 48px; /* Tamaño más pro */
+    font-weight: 700;
+    color: #ffffff; /* Texto blanco */
+    text-align: center;
+    margin-top: 20px;
+
+    animation: fadeInUp 3s ease-out forwards;
+}
+
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(135deg, #7171b8, #121253, #3030bd);
+    color: rgb(255, 255, 255);
+    text-align: center;
+}
+
+.container {
+    padding: 20px;
+}
+
+.titulo {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.2rem;
+    margin-bottom: 40px;
+    color: #a6bbca;
+    text-shadow: 0 3px 15px rgba(0,0,0,0.6);
+    letter-spacing: 2px;
+}
+
+.carousel {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel-window {
+    overflow: hidden;
+    width: 1100px;
+}
+
+.carousel-track {
+    display: flex;
+    gap: 20px;
+    transition: transform 0.6s ease;
+}
+
+.card {
+    min-width: 350px;
+    height: 420px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.74);
+    opacity: 0;
+    transition: opacity 0.6s ease, transform 0.3s;
+}
+
+.card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card.show {
+    opacity: 1;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+
+button.prev,
+button.next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.4);
+    border: none;
+    color: white;
+    font-size: 3rem;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background 0.3s;
+    z-index: 10;
+}
+
+button.prev:hover,
+button.next:hover {
+    background: rgba(0,0,0,0.6);
+}
+
+button.prev {
+    left: 15px;
+}
+
+button.next {
+    right: 15px;
+}
+
