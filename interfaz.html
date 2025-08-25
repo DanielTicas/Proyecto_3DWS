@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de Sesión</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0a2f5c, #145ea8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Contenedor login */
+        .container {
+            display: flex;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            max-width: 900px;
+            width: 100%;
+        }
+
+        /* Lado izquierdo */
+        .left {
+            flex: 1;
+            background: linear-gradient(135deg, #0a2f5c, #145ea8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.5em;
+            font-size: 16px;
+        }
+
+        .left img {
+            width: 120px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .left img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Lado derecho */
+        .right {
+            flex: 1;
+            padding: 40px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #0a2f5c;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #145ea8, #0a2f5c);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .login-btn:hover {
+            opacity: 0.9;
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .options a {
+            color: #145ea8;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left">
+            <img src="logo.png" alt="Munte Rise">
+            Bienvenido usuario en este apartado deberá crear su usuario y contraseña y 
+            ingresar el código de producto para poder acceder a su base de datos privada.
+        </div>
+        <div class="right">
+            <h2>Crear cuenta de usuario</h2>
+            <form>
+                <input type="text" placeholder="Usuario" required>
+                <input type="password" placeholder="Contraseña" required>
+                <input type="text" placeholder="ID de producto" required>
+                <button class="login-btn" type="submit">LOGIN</button>
+                <div class="options">
+                    <label><input type="checkbox"> Recordarme</label>
+                    <a href="#">¿Olvidaste la contraseña?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
