@@ -1,45 +1,55 @@
-const express = require('express');
 const connection = require('../config/database');
-const { authenticateToken } = require('../middlewares/auth');
-const router = express.Router();
 
-router.get('/:ip', authenticateToken, async (req, res) => {
-  try {
-    const { ip } = req.params;
-
-    const [devices] = await connection.promise().query(
-      'SELECT * FROM devices WHERE ip_dispositivo = ?',
-      [ip]
-    );
-
-    if (devices.length === 0) {
-      return res.status(404).json({ error: 'Dispositivo no encontrado' });
+const devicesController = {
+  // Obtener todos los dispositivos del usuario
+  getUserDevices: async (req, res) => {
+    try {
+      const userId = req.user.userId;
+      
+      const query = `
+        SELECT d.* FROM devices d
+        INNER JOIN device_users du ON d.device_id = du.device_id
+        WHERE du.user_id = ?
+      `;
+      
+      const [devices] = await connection.promise().query(query, [userId]);
+      
+      res.json(devices);
+    } catch (error) {
+      console.error('Error al obtener dispositivos:', error);
+      res.status(500).json({ error: 'Error interno del servidor' });
     }
+  },
 
-    res.json(devices[0]);
-
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  // Agregar un nuevo dispositivo
+  addDevice: async (req, res) => {
+    try {
+      const userId = req.user.userId;
+      const { ip_dispositivo, nombre } = req.body;
+      
+      // 1. Insertar el dispositivo
+      const insertDeviceQuery = 'INSERT INTO devices (ip_dispositivo, nombre) VALUES (?, ?)';
+      const [deviceResult] = await connection.promise().query(insertDeviceQuery, [ip_dispositivo, nombre]);
+      
+      // 2. Vincular dispositivo al usuario
+      const linkDeviceQuery = 'INSERT INTO device_users (user_id, device_id) VALUES (?, ?)';
+      await connection.promise().query(linkDeviceQuery, [userId, deviceResult.insertId]);
+      
+      res.status(201).json({
+        message: 'Dispositivo agregado exitosamente',
+        deviceId: deviceResult.insertId
+      });
+    } catch (error) {
+      console.error('Error al agregar dispositivo:', error);
+      
+      // Si es error de duplicado
+      if (error.code === 'ER_DUP_ENTRY') {
+        return res.status(409).json({ error: 'La dirección IP ya existe' });
+      }
+      
+      res.status(500).json({ error: 'Error interno del servidor' });
+    }
   }
-});
+};
 
-router.post('/', authenticateToken, async (req, res) => {
-  try {
-    const { ip_dispositivo, nombre } = req.body;
-
-    const [result] = await connection.promise().query(
-      'INSERT INTO devices (ip_dispositivo, nombre) VALUES (?, ?)',
-      [ip_dispositivo, nombre]
-    );
-
-    res.status(201).json({ 
-      device_id: result.insertId,
-      message: 'Dispositivo registrado' 
-    });
-
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-module.exports = router;
+module.exports = devicesController;
