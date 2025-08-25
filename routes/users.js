@@ -3,26 +3,39 @@ const connection = require('../config/database');
 const { authenticateToken } = require('../middlewares/auth');
 const router = express.Router();
 
-router.post('/:deviceId/users', authenticateToken, async (req, res) => {
+router.get('/:ip', authenticateToken, async (req, res) => {
   try {
-    const { deviceId } = req.params;
-    const { userId } = req.body;
+    const { ip } = req.params;
 
-    const [userCount] = await connection.promise().query(
-      'SELECT COUNT(*) as count FROM device_users WHERE device_id = ?',
-      [deviceId]
+    const [devices] = await connection.promise().query(
+      'SELECT * FROM devices WHERE ip_dispositivo = ?',
+      [ip]
     );
 
-    if (userCount[0].count >= 4) {
-      return res.status(400).json({ error: 'Límite de 4 usuarios alcanzado' });
+    if (devices.length === 0) {
+      return res.status(404).json({ error: 'Dispositivo no encontrado' });
     }
 
-    await connection.promise().query(
-      'INSERT INTO device_users (user_id, device_id) VALUES (?, ?)',
-      [userId, deviceId]
+    res.json(devices[0]);
+
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+router.post('/', authenticateToken, async (req, res) => {
+  try {
+    const { ip_dispositivo, nombre } = req.body;
+
+    const [result] = await connection.promise().query(
+      'INSERT INTO devices (ip_dispositivo, nombre) VALUES (?, ?)',
+      [ip_dispositivo, nombre]
     );
 
-    res.status(201).json({ message: 'Usuario vinculado al dispositivo' });
+    res.status(201).json({ 
+      device_id: result.insertId,
+      message: 'Dispositivo registrado' 
+    });
 
   } catch (error) {
     res.status(500).json({ error: error.message });
